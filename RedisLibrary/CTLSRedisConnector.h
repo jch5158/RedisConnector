@@ -16,8 +16,6 @@ public:
 
 	~CTLSRedisConnector(void)
 	{
-		freeRedisConnector();
-
 		freeTLSIndex();
 
 		CRedisConnector::CallWSACleanup();
@@ -46,6 +44,8 @@ public:
 	void Disconnect(void)
 	{
 		getRedisConnector()->Disconnect();
+
+		freeRedisConnector();
 
 		return;
 	}
