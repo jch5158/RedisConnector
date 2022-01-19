@@ -12,17 +12,6 @@
 #pragma comment (lib,"cpp_redis.lib")
 #pragma comment (lib,"tacopie.lib")
 
-namespace redisconnector
-{
-	constexpr DWORD MAX_IP_LENGTH = 20;
-
-	constexpr DWORD MAX_KEY_LENGTH = MAX_PATH;
-
-	constexpr DWORD MAX_VALUE_LENGTH = MAX_PATH;
-
-	constexpr DWORD MAX_LOG_LENGTH = MAX_PATH;
-}
-
 class CRedisConnector
 {
 public:
@@ -31,13 +20,6 @@ public:
 		:mbConnectFlag(false)
 		, mConnectPort(6379)
 		, mConnectIP(L"127.0.0.1")
-		, mRedisClient()
-	{}
-
-	explicit CRedisConnector(const wchar_t* connectIP, unsigned short connectPort)
-		:mbConnectFlag(false)
-		, mConnectIP(connectIP)
-		, mConnectPort(connectPort)
 		, mRedisClient()
 	{}
 
@@ -282,7 +264,7 @@ public:
 	}
 
 
-	bool GetValue(long long key, long long *pValue)
+	bool GetValue(long long key, long long* pValue)
 	{
 		if (pValue == nullptr)
 			return false;
@@ -293,7 +275,7 @@ public:
 
 			mRedisClient.sync_commit();
 
-			*pValue = atoi(value.get().as_string().c_str());
+			*pValue = atoll(value.get().as_string().c_str());
 		}
 		catch (const cpp_redis::redis_error& exp)
 		{
@@ -305,7 +287,7 @@ public:
 		return true;
 	}
 
-	bool GetValue(const char* pKey, long long *pValue)
+	bool GetValue(const char* pKey, long long* pValue)
 	{
 		if (pKey == nullptr || pValue == nullptr)
 			return false;
@@ -316,7 +298,7 @@ public:
 
 			mRedisClient.sync_commit();
 
-			*pValue = atoi(value.get().as_string().c_str());
+			*pValue = atoll(value.get().as_string().c_str());
 		}
 		catch (const cpp_redis::redis_error& exp)
 		{
@@ -331,10 +313,10 @@ public:
 	bool GetString(long long key, std::string& value)
 	{
 		try
-		{	
+		{
 			auto retval = mRedisClient.get(std::to_string(key));
 
-			mRedisClient.sync_commit();			
+			mRedisClient.sync_commit();
 
 			value = retval.get().as_string();
 		}
@@ -348,7 +330,7 @@ public:
 		return true;
 	}
 
-	bool GetString(const char* pKey, std::string &value)
+	bool GetString(const char* pKey, std::string& value)
 	{
 		if (pKey == nullptr)
 			return false;
@@ -398,7 +380,7 @@ public:
 
 		return bRetvalFlag;
 	}
-	
+
 
 	bool RemoveKey(const char* pKey)
 	{
@@ -430,7 +412,7 @@ public:
 	}
 
 
-	bool CompareToken(const char* pKey,const std::string &token)
+	bool CompareToken(const char* pKey, const std::string& token)
 	{
 		if (pKey == nullptr)
 			return false;
@@ -461,7 +443,7 @@ public:
 			mRedisClient.sync_commit();
 
 			if (token == retval.get().as_string())
-				return true;	
+				return true;
 		}
 		catch (const cpp_redis::redis_error& exp)
 		{
@@ -471,10 +453,19 @@ public:
 		}
 	}
 
-
 	bool GetConnectFlag(void) const
 	{
 		return mbConnectFlag;
+	}
+
+	const wchar_t* GetConnectIP(void) const
+	{
+		return mConnectIP.c_str();
+	}
+
+	unsigned short GetConnectPort(void) const
+	{
+		return mConnectPort;
 	}
 
 private:

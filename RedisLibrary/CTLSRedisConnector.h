@@ -16,6 +16,8 @@ public:
 
 	~CTLSRedisConnector(void)
 	{
+		freeRedisConnector();
+
 		freeTLSIndex();
 
 		CRedisConnector::CallWSACleanup();
@@ -26,14 +28,14 @@ public:
 
 	void Connect(void)
 	{	
-		getRedisLibrary()->Connect();
+		getRedisConnector()->Connect();
 
 		return;
 	}
 
-	bool Connect(wchar_t* pConnectIP, unsigned short connectPort)
+	bool Connect(const wchar_t* pConnectIP, unsigned short connectPort)
 	{
-		CRedisConnector* pRedisConnector = getRedisLibrary();
+		CRedisConnector* pRedisConnector = getRedisConnector();
 
 		if (pRedisConnector->Connect(pConnectIP, connectPort) == false)
 			return false;
@@ -43,14 +45,14 @@ public:
 
 	void Disconnect(void)
 	{
-		getRedisLibrary()->Disconnect();
+		getRedisConnector()->Disconnect();
 
 		return;
 	}
 
 	bool Set(const char* pKey, const char* pValue)
 	{
-		CRedisConnector* pRedisConnector = getRedisLibrary();
+		CRedisConnector* pRedisConnector = getRedisConnector();
 		
 		if (pRedisConnector->Set(pKey, pValue) == false)
 			return false;
@@ -60,7 +62,7 @@ public:
 
 	bool SetEx(const char* pKey, long long seconds, const char* pValue)
 	{
-		CRedisConnector* pRedisConnector = getRedisLibrary();
+		CRedisConnector* pRedisConnector = getRedisConnector();
 
 		if (pRedisConnector->SetEx(pKey, seconds, pValue) == false)
 			return false;
@@ -71,7 +73,7 @@ public:
 
 	bool Set(const char* pKey, long long value)
 	{
-		CRedisConnector* pRedisConnector = getRedisLibrary();
+		CRedisConnector* pRedisConnector = getRedisConnector();
 
 		if (pRedisConnector->Set(pKey, value) == false)
 			return false;
@@ -81,7 +83,7 @@ public:
 
 	bool SetEx(const char* pKey, long long seconds, long long value)
 	{
-		CRedisConnector* pRedisConnector = getRedisLibrary();
+		CRedisConnector* pRedisConnector = getRedisConnector();
 
 		if (pRedisConnector->SetEx(pKey, seconds, value) == false)
 			return false;
@@ -92,7 +94,7 @@ public:
 
 	bool Set(long long key, long long value)
 	{
-		CRedisConnector* pRedisConnector = getRedisLibrary();
+		CRedisConnector* pRedisConnector = getRedisConnector();
 
 		if (pRedisConnector->Set(key, value) == false)
 			return false;
@@ -102,7 +104,7 @@ public:
 
 	bool SetEx(long long key, long long seconds, long long value)
 	{
-		CRedisConnector* pRedisConnector = getRedisLibrary();
+		CRedisConnector* pRedisConnector = getRedisConnector();
 
 		if (pRedisConnector->SetEx(key, seconds, value) == false)
 			return false;
@@ -114,7 +116,7 @@ public:
 
 	bool Set(long long key, const char* pValue)
 	{
-		CRedisConnector* pRedisConnector = getRedisLibrary();
+		CRedisConnector* pRedisConnector = getRedisConnector();
 
 		if (pRedisConnector->Set(key, pValue) == false)
 			return false;
@@ -125,7 +127,7 @@ public:
 
 	bool SetEx(long long key, long long seconds, const char* pValue)
 	{
-		CRedisConnector* pRedisConnector = getRedisLibrary();
+		CRedisConnector* pRedisConnector = getRedisConnector();
 
 		if (pRedisConnector->SetEx(key, seconds, pValue) == false)
 			return false;
@@ -137,7 +139,7 @@ public:
 
 	bool GetValue(const char* pKey, long long *pValue)
 	{
-		if (getRedisLibrary()->GetValue(pKey, pValue) == false)
+		if (getRedisConnector()->GetValue(pKey, pValue) == false)
 			return false;
 
 		return true;
@@ -146,7 +148,7 @@ public:
 
 	bool GetValue(long long key, long long* pValue)
 	{
-		if (getRedisLibrary()->GetValue(key, pValue) == false)
+		if (getRedisConnector()->GetValue(key, pValue) == false)
 			return false;
 
 		return true;
@@ -154,7 +156,7 @@ public:
 
 	bool RemoveKey(long long key)
 	{
-		if (getRedisLibrary()->RemoveKey(key) == false)
+		if (getRedisConnector()->RemoveKey(key) == false)
 			return false;
 
 		return true;
@@ -162,7 +164,7 @@ public:
 
 	bool RemoveKey(const char* pKey)
 	{
-		if (getRedisLibrary()->RemoveKey(pKey) == false)
+		if (getRedisConnector()->RemoveKey(pKey) == false)
 			return false;
 
 		return true;
@@ -170,7 +172,7 @@ public:
 
 	bool GetString(const char* pKey, std::string &value)
 	{
-		if (getRedisLibrary()->GetString(pKey, value) == false)
+		if (getRedisConnector()->GetString(pKey, value) == false)
 			return false;
 
 		return true;
@@ -178,7 +180,7 @@ public:
 
 	bool GetString(long long key, std::string &value)
 	{
-		if (getRedisLibrary()->GetString(key, value) == false)
+		if (getRedisConnector()->GetString(key, value) == false)
 			return false;
 
 		return true;
@@ -186,18 +188,18 @@ public:
 
 	bool GetConnectFlag(void)
 	{
-		getRedisLibrary()->GetConnectFlag();
+		getRedisConnector()->GetConnectFlag();
 	}
 
 
 	bool CompareToken(long long key, const std::string &token)
 	{
-		return getRedisLibrary()->CompareToken(key, token);
+		return getRedisConnector()->CompareToken(key, token);
 	}
 
 	bool CompareToken(const char* pKey, const std::string &token)
 	{	
-		return getRedisLibrary()->CompareToken(pKey, token);
+		return getRedisConnector()->CompareToken(pKey, token);
 	}
 
 private:
@@ -233,7 +235,7 @@ private:
 		return;
 	}
 
-	CRedisConnector* getRedisLibrary(void)
+	CRedisConnector* getRedisConnector(void)
 	{
 		CRedisConnector* pRedisConnector = (CRedisConnector*)TlsGetValue(mTLSIndex);
 		if (pRedisConnector == nullptr)
@@ -245,6 +247,20 @@ private:
 
 		return pRedisConnector;
 	}
+
+	void freeRedisConnector(void)
+	{
+		CRedisConnector* pRedisConnector = (CRedisConnector*)TlsGetValue(mTLSIndex);
+		if (pRedisConnector != nullptr)
+		{
+			delete pRedisConnector;
+
+			TlsSetValue(mTLSIndex, nullptr);
+		}
+
+		return;
+	}
+
 
 	unsigned int mTLSIndex;
 };

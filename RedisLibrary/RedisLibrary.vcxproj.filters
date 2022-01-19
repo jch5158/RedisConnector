@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="main">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="PCH">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Library">
+      <UniqueIdentifier>{750c4bdb-26e1-413a-b71c-8a045b64079a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Library\RedisLibrary">
+      <UniqueIdentifier>{fd254029-4bc7-475d-8dc1-a8707e2bc6c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Library\DumpLibrary">
+      <UniqueIdentifier>{1637bd45-29f8-41fc-993b-fafc89492c7e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Library\SystemLogLibrary">
+      <UniqueIdentifier>{114de0b2-8f61-43f6-87e5-4c231b5249a0}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="RedisLibrary.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>PCH</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="stdafx.h">
+      <Filter>PCH</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\DumpLibrary\DumpLibrary\CCrashDump.h">
+      <Filter>Library\DumpLibrary</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\SystemLogLibrary\SystemLogLibrary\CSystemLog.h">
+      <Filter>Library\SystemLogLibrary</Filter>
+    </ClInclude>
+    <ClInclude Include="CRedisConnector.h">
+      <Filter>Library\RedisLibrary</Filter>
+    </ClInclude>
+    <ClInclude Include="CTLSRedisConnector.h">
+      <Filter>Library\RedisLibrary</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
