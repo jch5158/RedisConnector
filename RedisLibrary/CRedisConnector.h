@@ -5,6 +5,7 @@
 #include <strsafe.h>
 #include <iostream>
 #include <Windows.h>
+#include <vector>
 #include "DumpLibrary/DumpLibrary/CCrashDump.h"
 #include "SystemLogLibrary/SystemLogLibrary/CSystemLog.h"
 
@@ -23,10 +24,7 @@ public:
 		, mRedisClient()
 	{}
 
-	~CRedisConnector(void)
-	{
-		CallWSACleanup();
-	}
+	~CRedisConnector(void) = default;
 
 	CRedisConnector(const CRedisConnector&) = delete;
 	CRedisConnector operator=(const CRedisConnector&) = delete;
@@ -412,9 +410,9 @@ public:
 	}
 
 
-	bool CompareToken(const char* pKey, const std::string& token)
+	bool CompareToken(const char* pKey, const char* pToken)
 	{
-		if (pKey == nullptr)
+		if (pKey == nullptr || pToken == nullptr)
 			return false;
 
 		try
@@ -423,7 +421,7 @@ public:
 
 			mRedisClient.sync_commit();
 
-			if (token == retval.get().as_string())
+			if (retval.get().as_string() == pToken)
 				return true;
 		}
 		catch (const cpp_redis::redis_error& exp)
@@ -434,15 +432,18 @@ public:
 		}
 	}
 
-	bool CompareToken(long long key, const std::string& token)
+	bool CompareToken(long long key, const char* pToken)
 	{
+		if (pToken == nullptr)
+			return false;
+
 		try
 		{
 			auto retval = mRedisClient.get(std::to_string(key));
 
 			mRedisClient.sync_commit();
 
-			if (token == retval.get().as_string())
+			if (retval.get().as_string() == pToken)
 				return true;
 		}
 		catch (const cpp_redis::redis_error& exp)

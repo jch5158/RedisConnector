@@ -9,16 +9,12 @@ public:
 	CTLSRedisConnector(void)
 		:mTLSIndex(UINT_MAX)
 	{
-		CRedisConnector::CallWSAStartup();
-
 		setTLSIndex();
 	}
 
 	~CTLSRedisConnector(void)
 	{
 		freeTLSIndex();
-
-		CRedisConnector::CallWSACleanup();
 	}
 
 	CTLSRedisConnector(const CTLSRedisConnector&) = delete;
@@ -192,14 +188,14 @@ public:
 	}
 
 
-	bool CompareToken(long long key, const std::string &token)
+	bool CompareToken(long long key, const char* pToken)
 	{
-		return getRedisConnector()->CompareToken(key, token);
+		return getRedisConnector()->CompareToken(key, pToken);
 	}
 
-	bool CompareToken(const char* pKey, const std::string &token)
+	bool CompareToken(const char* pKey, const char* pToken)
 	{	
-		return getRedisConnector()->CompareToken(pKey, token);
+		return getRedisConnector()->CompareToken(pKey, pToken);
 	}
 
 private:
